@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Fixer Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/fixer.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="user">
+                <div class="avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="user-info"> 
+                    <strong id="sidebar-user-email">Fixer</strong>
+                </div>
+            </div>
+            <nav class="menu">
+                <a href="#" data-page="dashboard" class="active">
+                    <i class="fa-solid fa-chart-line"></i> Boshqaruv paneli
+                </a>
+                <a href="#" data-page="newOrders">
+                    <i class="fa-solid fa-plus-circle"></i> Yangi buyurtmalar
+                </a>
+                <a href="#" data-page="awaitingUserConfirmation">
+                    <i class="fa-solid fa-hourglass-half"></i> Foydalanuvchi tasdiqlashini kutayotgan
+                </a>
+                <a href="#" data-page="confirmedByUser">
+                    <i class="fa-solid fa-check-circle"></i> Foydalanuvchi tasdiqlagan
+                </a>
+                <a href="#" data-page="completedOrders">
+                    <i class="fa-solid fa-clipboard-check"></i> Yakunlangan buyurtmalar
+                </a>
+                <a href="#" class="logout" onclick="logout()">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Chiqish
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content" id="main-content">
+            </main>
+    </div>
+
+    <script>
+        // TOKEN olish (localStorage, yoki prompt)
+        let token = localStorage.getItem('token');
+        if (!token) {
+            window.location = "login.html";
+        }
+
+        // Sahifa shablonlari
+        const pages = {
+            dashboard: `
+                <h1>Fixer Boshqaruv Paneli</h1>
+                <p>Xush kelibsiz, Fixer!</p>
+                <div class="cards">
+                    <div class="card">
+                        <h3>Umumiy buyurtmalar</h3>
+                        <p id="total-orders-count" class="text-3xl font-bold text-blue-600">...</p>
+                    </div>
+                    <div class="card">
+                        <h3>Yangi buyurtmalar</h3>
+                        <p id="new-orders-count" class="text-3xl font-bold text-green-600">...</p>
+                    </div>
+                    <div class="card">
+                        <h3>Yakunlangan buyurtmalar</h3>
+                        <p id="completed-orders-count" class="text-3xl font-bold text-purple-600">...</p>
+                    </div>
+                </div>
+                <h2 style="margin-top: 30px; margin-bottom: 20px; color: #333;">So'nggi buyurtmalar</h2>
+                <div id="latest-orders-container" class="orders-grid">
+                    <p style="text-align:center; color:#777;">Buyurtmalar yuklanmoqda...</p>
+                </div>
+            `,
+            newOrders: `
+                <h1>Yangi buyurtmalar</h1>
+                <div id="new-orders-list" class="orders-grid">
+                    <p style="text-align:center; color:#777;">Yangi buyurtmalar yuklanmoqda...</p>
+                </div>
+            `,
+            awaitingUserConfirmation: `
+                <h1>Foydalanuvchi tasdiqlashini kutayotgan</h1>
+                <div id="awaiting-orders-list" class="orders-grid">
+                    <p style="text-align:center; color:#777;">Buyurtmalar yuklanmoqda...</p>
+                </div>
+            `,
+            confirmedByUser: `
+                <h1>Foydalanuvchi tasdiqlagan</h1>
+                <div id="confirmed-orders-list" class="orders-grid">
+                    <p style="text-align:center; color:#777;">Buyurtmalar yuklanmoqda...</p>
+                </div>
+            `,
+            completedOrders: `
+                <h1>Yakunlangan buyurtmalar</h1>
+                <div id="completed-orders-list" class="orders-grid">
+                    <p style="text-align:center; color:#777;">Yakunlangan buyurtmalar yuklanmoqda...</p>
+                </div>
+            `
+        };
+
+        // Buyurtmalarni yuklash va chizish
+        function loadOrders(statusFilter = 'all', targetElementId = 'main-content') {
+            const targetElement = document.getElementById(targetElementId);
+            targetElement.innerHTML = '<p style="text-align:center; color:#777;">Buyurtmalar yuklanmoqda...</p>'; // Loading indicator
+
+            fetch('http://127.0.0.1:3000/fixer/orders', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(err => { throw new Error(err.message || 'Buyurtmalarni yuklab bo‘lmadi'); });
+                }
+                return res.json();
+            })
+            .then(data => {
+                let filteredData = [];
+                if (Array.isArray(data)) {
+                    if (statusFilter === 'all') {
+                        filteredData = data;
+                    } else if (statusFilter === 'new') {
+                        filteredData = data.filter(order => order.status === 'confirmed' && order.userstatus === 'waiting');
+                    } else if (statusFilter === 'awaitingUserConfirmation') {
+                        filteredData = data.filter(order => order.status === 'fixed_awaiting_user' && order.userstatus === 'waiting');
+                    } else if (statusFilter === 'confirmedByUser') {
+                        filteredData = data.filter(order => order.status === 'fixed_user_confirmed');
+                    } else if (statusFilter === 'completed') {
+                        filteredData = data.filter(order => order.status === 'completed');
+                    }
+                }
+
+                targetElement.innerHTML = ''; // Loading indicatorni tozalash
+
+                if (filteredData.length === 0) {
+                    targetElement.innerHTML = `<p style="color:#aaa; text-align:center;">Buyurtmalar yo‘q</p>`;
+                    return;
+                }
+
+                filteredData.forEach(order => {
+                    let displayStatusText = '';
+                    let statusClass = '';
+                    let isEditable = false; // Input maydonlari va Saqlash tugmasi uchun
+                    let showCompleteButton = false; // "Zakaz tayyor" tugmasi uchun
+
+                    if (order.status === 'confirmed' && order.userstatus === 'waiting') {
+                        displayStatusText = 'Yangi';
+                        statusClass = 'status-new';
+                        isEditable = true; 
+                    } else if (order.status === 'fixed_awaiting_user') {
+                        displayStatusText = 'Tasdiqlanmoqda (User)';
+                        statusClass = 'status-fixed-awaiting-user';
+                        isEditable = true; 
+                    } else if (order.status === 'fixed_user_confirmed') {
+                        displayStatusText = 'Tasdiqlandi (User)';
+                        statusClass = 'status-fixed-user-confirmed';
+                        isEditable = false; 
+                        showCompleteButton = true; 
+                    } else if (order.status === 'fixed_user_canceled') {
+                        displayStatusText = 'Bekor qilindi (User)';
+                        statusClass = 'status-fixed-user-canceled';
+                        isEditable = false; 
+                        showCompleteButton = false; 
+                    } else if (order.status === 'completed') {
+                        displayStatusText = 'Yakunlandi';
+                        statusClass = 'status-completed';
+                        isEditable = false;
+                        showCompleteButton = false;
+                    } else {
+                        displayStatusText = order.status;
+                        statusClass = 'status-pending'; 
+                        isEditable = false;
+                    }
+
+                    const orderCard = document.createElement('div');
+                    orderCard.className = 'order-card';
+                    orderCard.innerHTML = `
+                        <div class="card-header">
+                            <strong>Buyurtma ID: #${order.id}</strong>
+                            <span class="status ${statusClass}">${displayStatusText}</span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Ism:</strong> ${order.name || 'Noma\'lum'}</p>
+                            <p><strong>Telefon:</strong> ${order.phone || 'Noma\'lum'}</p>
+                            <p><strong>Tavsif:</strong> ${order.description || 'Tavsif yo‘q'}</p>
+                            ${order.cost ? `<p><strong>Narx:</strong> ${order.cost} UZS</p>` : ''}
+                            ${order.timeon ? `<p><strong>Bajarish vaqti:</strong> ${new Date(order.timeon).toLocaleString('uz-UZ')}</p>` : ''}
+                            <div class="input-group">
+                                <label for="cost${order.id}">Narx (UZS):</label>
+                                <input type="number" id="cost${order.id}" value="${order.cost || ''}" placeholder="Narx kiriting" ${isEditable ? '' : 'disabled'}>
+                            </div>
+                            <div class="input-group">
+                                <label for="timeon${order.id}">Bajarish vaqti:</label>
+                                <input type="datetime-local" id="timeon${order.id}" value="${(order.timeon || '').replace(' ', 'T')}" placeholder="Vaqt kiriting" ${isEditable ? '' : 'disabled'}>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button onclick="saveOrder(${order.id})" ${isEditable ? '' : 'disabled'}>Saqlash</button>
+                            ${showCompleteButton ? `<button class="complete-btn" onclick="completeOrder(${order.id})">Zakaz tayyor</button>` : ''}
+                        </div>
+                    `;
+                    targetElement.appendChild(orderCard);
+                });
+            })
+            .catch(error => {
+                console.error("Buyurtmalarni yuklashda xatolik:", error);
+                targetElement.innerHTML = `<p style="color:#f55; text-align:center;">Xatolik: ${error.message}</p>`;
+            });
+        }
+
+        // Dashboard statistikalarini yuklash
+        function loadDashboardStats() {
+            fetch('http://127.0.0.1:3000/fixer/orders', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    document.getElementById('total-orders-count').innerText = data.length;
+                    document.getElementById('new-orders-count').innerText = data.filter(order => order.status === 'confirmed' && order.userstatus === 'waiting').length;
+                    document.getElementById('completed-orders-count').innerText = data.filter(order => order.status === 'completed').length;
+                }
+            })
+            .catch(error => console.error("Statistikalarni yuklashda xatolik:", error));
+        }
+
+        // Saqlash tugmasi
+        function saveOrder(id) {
+            const costInput = document.getElementById('cost' + id);
+            const timeonInput = document.getElementById('timeon' + id);
+            const cost = costInput ? costInput.value : '';
+            const timeon = timeonInput ? timeonInput.value.replace('T', ' ') : '';
+            let msg = document.getElementById('msg'); // Bu element endi mavjud emas, shuning uchun uni o'chiramiz yoki boshqa joyga ko'chiramiz
+
+            // Asosiy tekshiruv
+            if (!cost || !timeon) {
+                alert("Narx va bajarish vaqtini to'ldiring!"); // Alert ishlatish o'rniga modal yoki Toast xabar
+                return;
+            }
+
+            fetch('http://127.0.0.1:3000/fixer/orders/' + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ cost, timeon })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(err => { throw new Error(err.message || 'Yangilashda xatolik'); });
+                }
+                return res.json();
+            })
+            .then(res => {
+                alert(res.message || 'Buyurtma yangilandi!');
+                setPage(currentPage); // Joriy sahifani qayta yuklash
+            })
+            .catch(error => {
+                console.error("Buyurtmani saqlashda xatolik:", error);
+                alert("Xatolik: " + error.message);
+            });
+        }
+
+        // Buyurtmani yakunlangan deb belgilash funksiyasi
+        function completeOrder(id) {
+            if (!confirm("Buyurtmani yakunlangan deb belgilamoqchimisiz?")) return;
+
+            fetch(`http://127.0.0.1:3000/fixer/orders/${id}/complete`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(err => { throw new Error(err.message || 'Buyurtmani yakunlashda xatolik'); });
+                }
+                return res.json();
+            })
+            .then(res => {
+                alert(res.message || "Buyurtma yakunlandi!");
+                setPage(currentPage); // Joriy sahifani qayta yuklash
+            })
+            .catch(error => {
+                console.error("Buyurtmani yakunlashda xatolik:", error);
+                alert("Xatolik: " + error.message);
+            });
+        }
+
+        // Sahifa yuklash funksiyasi
+        let currentPage = 'dashboard'; // Default sahifa
+
+        function setPage(page) {
+            currentPage = page;
+            document
+                .querySelectorAll(".menu a")
+                .forEach((a) => a.classList.remove("active"));
+            document
+                .querySelector(`.menu a[data-page="${page}"]`)
+                ?.classList.add("active");
+
+            const mainContent = document.getElementById("main-content");
+            mainContent.innerHTML = pages[page]; // Load initial page structure
+
+            if (page === "dashboard") {
+                loadDashboardStats();
+                loadOrders('all', 'latest-orders-container'); // So'nggi buyurtmalar
+            } else if (page === "newOrders") {
+                loadOrders('new', 'new-orders-list');
+            } else if (page === "awaitingUserConfirmation") {
+                loadOrders('awaitingUserConfirmation', 'awaiting-orders-list');
+            } else if (page === "confirmedByUser") {
+                loadOrders('confirmedByUser', 'confirmed-orders-list');
+            } else if (page === "completedOrders") {
+                loadOrders('completed', 'completed-orders-list');
+            }
+        }
+
+        // Chiqish funksiyasi
+        function logout() {
+            if (confirm("Chiqishni istaysizmi?")) {
+                localStorage.removeItem("token");
+                window.location = "login.html"; // Login sahifasiga yo'naltirish
+            }
+        }
+
+        // Navbar eventlar
+        document.querySelectorAll(".menu a[data-page]").forEach((link) => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault();
+                setPage(this.getAttribute("data-page"));
+            });
+        });
+
+        // Dastlabki sahifa yuklansin
+        document.addEventListener('DOMContentLoaded', () => {
+            setPage("dashboard");
+            // Profil uchun sidebar avtomatik yangilash
+            const token = localStorage.getItem("token");
+            if (token) {
+                fetch("http://127.0.0.1:3000/profile", {
+                    headers: { Authorization: "Bearer " + token },
+                })
+                .then((res) => res.json())
+                .then((user) => {
+                    document.getElementById("sidebar-user-name").innerText =
+                        user.name || "Fixer";
+                    document.getElementById("sidebar-user-email").innerText =
+                        user.email || "";
+                })
+                .catch(e => console.error("Sidebar profilini yuklashda xatolik:", e));
+            }
+        });
+    </script>
+</body>
+</html>

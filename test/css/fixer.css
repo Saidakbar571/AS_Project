@@ -1,0 +1,339 @@
+
+        /* Inter fontini butun sahifa uchun sozlash */
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Dashboard layout */
+        .dashboard {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            background-color: #1f2937; /* Darker sidebar */
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+        .sidebar .user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .user .avatar {
+            width: 50px;
+            height: 50px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .sidebar .user .user-info strong {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+       
+        .sidebar .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex-grow: 1; /* Allow menu to take available space */
+        }
+        .sidebar .menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: #d1d5db;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .sidebar .menu a:hover,
+        .sidebar .menu a.active {
+            background-color: #374151; /* Darker on hover/active */
+            color: white;
+        }
+        .sidebar .menu a .fa-solid {
+            font-size: 1rem;
+        }
+        .sidebar .logout {
+            margin-top: auto; /* Push to bottom */
+            background-color: #ef4444;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .sidebar .logout:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* Main content styles */
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            background-color: #f9fafb;
+            border-radius: 12px;
+            margin: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow-y: auto; /* Scrollable content */
+        }
+        .main-content h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            text-align: left; /* Align h1 to left in main content */
+        }
+        .main-content h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .main-content p {
+            color: #4b5563;
+        }
+
+        /* Card styles for dashboard and announcements */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .action-btn:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Order cards grid */
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .order-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        .order-card .card-header {
+            background-color: #eff6ff;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dbeafe;
+        }
+        .order-card .card-header strong {
+            color: #1e40af;
+            font-size: 1.125rem;
+        }
+        .order-card .card-body {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .order-card .card-body p {
+            font-size: 0.95rem;
+            color: #374151;
+        }
+        .order-card .card-body strong {
+            color: #1f2937;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+        }
+        .input-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #4b5563;
+        }
+        .input-group input {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #374151;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        }
+        .order-card .card-footer {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+            text-align: right;
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+        .order-card .card-footer button {
+            padding: 0.75rem 1.5rem;
+            background-color: #22c55e; /* Yashil rang */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .order-card .card-footer button:hover {
+            background-color: #16a34a;
+            transform: translateY(-2px);
+        }
+        .order-card .card-footer button:disabled {
+            background-color: #9ca3af; /* Kulrang, o'chirilgan holat */
+            cursor: not-allowed;
+        }
+        .order-card .card-footer .complete-btn {
+            background-color: #3b82f6; /* Moviy rang */
+        }
+        .order-card .card-footer .complete-btn:hover {
+            background-color: #2563eb;
+        }
+
+        /* Status styles (copied from user panel for consistency) */
+        .status {
+            padding: 0.3rem 0.7rem;
+            border-radius: 5px;
+            font-weight: 600;
+            text-transform: capitalize;
+            font-size: 0.875rem;
+        }
+        .status-pending {
+            background-color: #fef3c7; /* Sariq */
+            color: #b45309;
+        }
+        .status-confirmed {
+            background-color: #bfdbfe; /* Moviy */
+            color: #1e40af;
+        }
+        .status-fixed-awaiting-user {
+            background-color: #fef3c7; /* Och sariq */
+            color: #b45309;
+        }
+        .status-fixed-user-confirmed {
+            background-color: #d1fae5; /* Yashil */
+            color: #065f46;
+        }
+        .status-fixed-user-canceled {
+            background-color: #fee2e2; /* Och qizil */
+            color: #b91c1c;
+        }
+        .status-completed {
+            background-color: #dbeafe; /* Moviyroq */
+            color: #1e40af;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-radius: 0;
+                padding: 1rem;
+            }
+            .sidebar .user {
+                margin-bottom: 1rem;
+            }
+            .sidebar .menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-bottom: 1rem;
+            }
+            .sidebar .menu a {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.9rem;
+            }
+            .sidebar .logout {
+                margin-top: 1rem;
+                align-self: stretch;
+            }
+            .main-content {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+            .main-content h1 {
+                font-size: 1.8rem;
+                text-align: center;
+            }
+            .order-card .card-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .order-card .card-footer button {
+                width: 100%;
+            }
+        }
+    

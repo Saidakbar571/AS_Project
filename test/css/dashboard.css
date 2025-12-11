@@ -1,0 +1,533 @@
+/* Import the Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif; /* Apply Inter font */
+    background-color: #f0f2f5; /* Light gray background */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    min-height: 100vh; /* Full viewport height */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.container.hidden {
+    display: none; /* Hide the dashboard container initially */
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background-color: #ffffff; /* White background */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky; /* Sticky sidebar */
+    top: 0;
+    height: 100vh; /* Full height */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    color: #333333;
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.sidebar-list {
+    text-decoration: none;
+    color: #555555;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    cursor: pointer; /* Indicate clickable */
+}
+
+.sidebar-list:hover {
+    background-color: #e9f5ff; /* Light blue on hover */
+    color: #007bff; /* Blue text on hover */
+}
+
+.sidebar-list.active {
+    background-color: #007bff; /* Blue for active link */
+    color: #ffffff; /* White text for active link */
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2); /* Soft shadow for active */
+}
+
+.logut-btn {
+    color: #dc3545; /* Red for logout */
+    margin-top: 20px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.logut-btn:hover {
+    background-color: #ffebeb; /* Light red on hover */
+    color: #c82333; /* Darker red on hover */
+}
+
+.logut-btn i {
+    margin-right: 10px;
+}
+
+/* Main Content Styling */
+.main-content, .zakaz-container, .stats-container {
+    flex-grow: 1; /* Takes up remaining space */
+    padding: 30px;
+    background-color: #f0f2f5;
+    box-sizing: border-box;
+    overflow-y: auto; /* Enable scrolling for content */
+}
+
+.profile-section {
+    background-color: #ffffff;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333333;
+    font-size: 16px;
+}
+
+.profile-section strong {
+    font-weight: 700;
+}
+
+.profile-section span {
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+.main-content h1, .zakaz-container h2, .stats-container h1 {
+    color: #333333;
+    margin-bottom: 25px;
+    font-weight: 700;
+    font-size: 28px;
+}
+
+/* Orders Grid (replacing table) */
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.order-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px; /* Ensure cards have a minimum height */
+    box-sizing: border-box;
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.order-card-header strong {
+    font-size: 18px;
+    color: #007bff; /* Highlight order ID */
+}
+
+.order-card-header .status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.status-new { background-color: #6c757d; } /* Grey */
+.status-confirmed { background-color: #007bff; } /* Blue */
+.status-fixed { background-color: #28a745; } /* Green */
+.status-cancelled { background-color: #dc3545; } /* Red */
+
+
+.order-card-body {
+    flex-grow: 1; /* Allow body to take available space */
+    margin-bottom: 15px;
+}
+
+.order-card-body p {
+    margin: 5px 0;
+    color: #555555;
+    font-size: 15px;
+}
+
+.order-card-body p strong {
+    color: #333333;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.order-card-body .description {
+    font-style: italic;
+    color: #777777;
+    margin-top: 10px;
+    white-space: pre-wrap; /* Preserve whitespace and allow wrapping */
+}
+
+.order-card-footer {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.confirm-btn, .cancel-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.confirm-btn {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+.confirm-btn:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+}
+
+.cancel-btn {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
+.cancel-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+/* Zakaz Olish Form Styling (reusing order.css concepts) */
+.zakaz-container {
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: flex-start; /* Align to top */
+    padding-top: 30px; /* Padding for top */
+}
+
+.order-container {
+    width: 100%;
+    max-width: 500px; /* Max width for the form */
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.order-form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555555;
+    font-weight: 600;
+}
+
+.order-form input[type="text"],
+.order-form input[type="tel"],
+.order-form input[type="email"],
+.order-form select,
+.order-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.order-form input:focus,
+.order-form select:focus,
+.order-form textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.order-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.order-form select {
+    background-color: #ffffff;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23555555" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+.order-form .btn {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+.order-form .btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.order-form .btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: none;
+    text-align: center;
+}
+
+/* Statistika Bo'limi Styling */
+.stats-container {
+    display: none; /* Hidden by default */
+    text-align: center;
+}
+
+#kpi-summary {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: left;
+}
+
+#kpi-summary p {
+    font-size: 18px;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+#kpi-summary p span {
+    font-weight: 600;
+    color: #007bff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 200px; /* Slightly smaller sidebar */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack sidebar and main content */
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto; /* Auto height for mobile */
+        position: relative; /* Remove sticky on mobile */
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Shadow at bottom */
+    }
+
+    .sidebar h2 {
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
+
+    .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .sidebar-list {
+        padding: 8px 12px;
+        margin: 5px; /* Adjust spacing */
+        font-size: 14px;
+    }
+
+    .logut-btn {
+        margin-top: 10px; /* Adjust margin */
+        width: 100%; /* Full width logout button */
+        text-align: center;
+        justify-content: center; /* Center content */
+    }
+
+    .main-content, .zakaz-container, .stats-container {
+        padding: 20px 15px;
+    }
+
+    .profile-section {
+        flex-direction: column; /* Stack profile info vertically */
+        align-items: flex-start;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+    }
+
+    .profile-section div {
+        margin-bottom: 10px; /* Space between role and time */
+    }
+
+    .main-content h1, .zakaz-container h2, .stats-container h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* Orders Grid Responsive Adjustments */
+    .orders-grid {
+        grid-template-columns: 1fr; /* Single column on small screens */
+    }
+
+    .order-card {
+        padding: 15px;
+    }
+
+    .order-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .order-card-header strong {
+        margin-bottom: 5px;
+    }
+
+    .order-card-body p {
+        font-size: 14px;
+    }
+
+    .order-card-footer {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 8px;
+    }
+
+    .confirm-btn, .cancel-btn {
+        width: 100%; /* Full width buttons */
+        margin: 0;
+    }
+
+    .order-container {
+        padding: 30px 20px;
+    }
+
+    .order-form input, .order-form select, .order-form textarea {
+        font-size: 15px;
+        padding: 10px 12px;
+    }
+
+    .order-form .btn {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    #kpi-summary {
+        padding: 15px;
+    }
+
+    #kpi-summary p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        padding: 10px;
+    }
+
+    .sidebar-list {
+        padding: 6px 10px;
+        font-size: 13px;
+        margin: 3px;
+    }
+
+    .main-content, .zakaz-container, .stats-container {
+        padding: 15px 10px;
+    }
+
+    .profile-section {
+        padding: 10px 15px;
+    }
+
+    .profile-section strong, .profile-section span {
+        font-size: 14px;
+    }
+
+    .main-content h1, .zakaz-container h2, .stats-container h1 {
+        font-size: 22px;
+    }
+
+    .order-container {
+        padding: 25px 15px;
+    }
+
+    .order-form h2 {
+        font-size: 20px;
+    }
+}

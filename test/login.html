@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./css/login.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="username">Foydalanuvchi nomi (email):</label>
+            <input type="text" id="username" required placeholder="Email kiriting" />
+        </div>
+        <div class="form-group">
+            <label for="password">Parol:</label>
+            <input type="password" id="password" required placeholder="Parolni kiriting" />
+        </div>
+        <button class="btn" onclick="login()">Kirish</button><br>
+        <div id="error-message" style="color:red; padding-top: 10px;"></div>
+    </div>
+
+    <!-- Modal oynasi -->
+    <div id="success-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; justify-content:center; align-items:center; background-color:rgba(0,0,0,0.5);">
+        <div class="modal-content" style="background:#fff; padding:20px; border-radius:10px; text-align:center;">
+            <h3 id="success-message"></h3>
+            <button class="close-btn" onclick="closeModal()">✔</button>
+        </div>
+    </div>
+
+    <script>
+        async function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+            const modal = document.getElementById('success-modal');
+
+            errorMessage.textContent = '';
+            errorMessage.style.display = 'none';
+
+            if (!username || !password) {
+                errorMessage.textContent = 'Iltimos, foydalanuvchi nomi va parolni kiriting.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: username, password: password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('role', data.role);
+
+                    successMessage.textContent = `Xush kelibsiz, ${data.role}!`;
+                    modal.style.display = 'flex';
+
+                    setTimeout(() => {
+                        closeModal();
+                        if (data.role === 'manager') {
+                            window.location.href = 'dashboard.html';
+                        }
+                        else if (data.role === 'fixer') {
+                            window.location.href = 'fixer.html';
+                        
+                        }else {
+                            window.location.href = 'user.html';
+                        }
+                    }, 2000);
+                } else {
+                    errorMessage.textContent = data.message || 'Login xatolik!';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Server bilan bog‘lanishda xatolik yuz berdi.';
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('success-modal');
+            modal.style.display = 'none';
+        }
+        document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            login();
+        }
+    });
+    </script>
+</body>
+</html>

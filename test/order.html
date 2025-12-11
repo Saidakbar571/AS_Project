@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/order.css" />
+  <title>Buyurtma Berish</title>
+</head>
+<body>
+  <div class="container">
+    <div class="order-form">
+      <h2>Buyurtma Berish</h2>
+
+      <div class="form-group">
+        <label for="customerType">Mijoz turi:</label>
+        <select id="customerType" required>
+          <option value="">Tanlang</option>
+          <option value="Jismoniy shaxs">Jismoniy shaxs</option>
+          <option value="Yuridik shaxs">Yuridik shaxs</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="name">F.I:</label>
+        <input type="text" id="name" placeholder="Familiya Ism" required />
+      </div>
+
+      <div class="form-group">
+        <label for="district">Tuman:</label>
+        <input type="text" id="district" placeholder="Masalan: Sergeli" required />
+      </div>
+
+      <div class="form-group">
+        <label for="serviceType">Xizmat turi:</label>
+        <select id="serviceType" required>
+          <option value="">Tanlang</option>
+          <option value="Uskuna">Uskuna (Hardware)</option>
+          <option value="Dasturiy">Dasturiy ta'minot</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Telefon raqam:</label>
+        <input type="tel" id="phone" placeholder="+998901234567" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="example@mail.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Muammo tavsifi:</label>
+        <textarea id="description" placeholder="Muammo haqida yozing..." required></textarea>
+      </div>
+      <div id="error-message"></div>
+      <button id="submitBtn" class="btn" onclick="submitOrder()">Yuborish</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>+998 95 977 08 85</p>
+    <div class="social-links">
+      <a href="https://t.me/obidov_zdess" target="_blank">Telegram</a>
+    </div>
+  </footer>
+
+  <script>
+  async function submitOrder() {
+    const customerType = document.getElementById("customerType").value;
+    const name = document.getElementById("name").value.trim();
+    const district = document.getElementById("district").value;
+    const serviceType = document.getElementById("serviceType").value;
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const errorMessage = document.getElementById("error-message");
+    const submitBtn = document.getElementById("submitBtn");
+
+    errorMessage.style.display = "none";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Yuborilmoqda...";
+
+    // Oddiy tekshiruv
+    if (!customerType || !name || !district || !serviceType || !phone || !email || !description) {
+      errorMessage.textContent = "Iltimos, barcha maydonlarni to‘ldiring.";
+      errorMessage.style.display = "block";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Yuborish";
+      return;
+    }
+
+    try {
+      const response = await fetch("http://127.0.0.1:3000/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ customerType, name, district, serviceType, phone, email, description }),
+      });
+
+      if (response.ok) {
+        alert("Buyurtma muvaffaqiyatli yuborildi! Sizning login va parolingiz emailga yuborildi.");
+        window.location.href = "index.html";
+      } else {
+        const error = await response.json();
+        errorMessage.textContent = error.message || "Buyurtma yuborishda xatolik!";
+        errorMessage.style.display = "block";
+      }
+    } catch (err) {
+      errorMessage.textContent = "Server bilan bog‘lanishda xatolik yuz berdi.";
+      errorMessage.style.display = "block";
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Yuborish";
+  }
+</script>
+
+</body>
+</html>

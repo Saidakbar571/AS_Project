@@ -1,0 +1,381 @@
+
+      /* Custom styles for the Inter font and overall body */
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #0f172a; /* Dark background for a modern feel */
+        color: #e2e8f0; /* Light text color */
+        line-height: 1.6;
+      }
+
+      /* Utility classes for container */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      /* Header specific styles */
+      header {
+        background-color: #1e293b; /* Slightly lighter dark background for header */
+        padding: 1rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #38b2ac; /* Teal color for logo */
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      nav a {
+        color: #cbd5e1;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      nav a:hover {
+        color: #38b2ac; /* Teal on hover */
+      }
+
+      .login {
+        background-color: #38b2ac;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 9999px; /* Fully rounded */
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .login:hover {
+        background-color: #319795;
+        transform: translateY(-2px);
+      }
+
+      .profile-container {
+        position: relative;
+        display: none; /* Hidden by default, shown by JS */
+      }
+
+      .profile-btn {
+        background-color: #4a5568;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 9999px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .profile-btn:hover {
+        background-color: #2d3748;
+        transform: translateY(-2px);
+      }
+
+      .profile-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        background-color: #2d3748;
+        border-radius: 0.5rem;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        padding: 1rem;
+        min-width: 150px;
+        z-index: 10;
+        display: none; /* Hidden by default, shown by JS */
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .profile-menu.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .profile-menu div {
+        padding: 0.5rem 0;
+        color: #cbd5e1;
+        font-weight: 500;
+      }
+
+      .logout-btn {
+        cursor: pointer;
+        color: #fc8181; /* Red for logout */
+        transition: color 0.3s ease;
+      }
+
+      .logout-btn:hover {
+        color: #e53e3e;
+      }
+
+      /* Hero section */
+      .hero {
+        background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://placehold.co/1920x1080/1a202c/e2e8f0?text=Kompyuter+Tuzatish') no-repeat center center;
+        background-size: cover;
+        min-height: 70vh; /* Make it taller */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        border-radius: 1rem; /* Rounded corners for the hero section */
+        margin-top: 1rem;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 2rem;
+        line-height: 1.2;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .hero .btn {
+        background: linear-gradient(to right, #63b3ed, #38b2ac); /* Blue to Teal gradient */
+        color: white;
+        padding: 1rem 2.5rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-radius: 9999px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .hero .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(to right, #38b2ac, #63b3ed); /* Reverse gradient on hover */
+      }
+
+      /* About Us section */
+      .about-section {
+        padding: 4rem 1rem;
+        text-align: center;
+        background-color: #1e293b;
+        margin-top: 1rem;
+        border-radius: 1rem;
+      }
+
+      .about-section h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #e2e8f0;
+        margin-bottom: 2rem;
+      }
+
+      .about-section p {
+        max-width: 800px;
+        margin: 0 auto 2rem auto;
+        color: #cbd5e1;
+        font-size: 1.1rem;
+        line-height: 1.8;
+      }
+
+      .about-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .about-card {
+        background-color: #2d3748;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: left;
+      }
+
+      .about-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .about-card .icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #63b3ed; /* Blue for icons */
+      }
+
+      .about-card h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin-bottom: 0.8rem;
+      }
+
+      .about-card p {
+        font-size: 0.95rem;
+        color: #a0aec0;
+        margin-bottom: 0; /* Override default p margin */
+      }
+
+      /* Contact Us section */
+      .contact-section {
+        padding: 4rem 1rem;
+        text-align: center;
+        background-color: #0f172a;
+      }
+
+      .contact-section h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #e2e8f0;
+        margin-bottom: 2rem;
+      }
+
+      .contact-info {
+        background: linear-gradient(to right, #2d3748, #4a5568);
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 3rem;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: #e2e8f0;
+        font-size: 1.1rem;
+      }
+
+      .contact-item .icon {
+        font-size: 1.8rem;
+        color: #38b2ac;
+      }
+
+      .contact-item a {
+        color: #63b3ed;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .contact-item a:hover {
+        color: #38b2ac;
+      }
+
+      /* Footer */
+      footer {
+        background-color: #1a202c; /* Darker footer */
+        padding: 2rem 0;
+        color: #cbd5e1;
+        text-align: center;
+      }
+
+      footer .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      footer .logo {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      footer nav {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      footer p {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      footer a {
+        color: #63b3ed; /* Blue for Telegram link */
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      footer a:hover {
+        color: #38b2ac; /* Teal on hover */
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .about-section h1, .contact-section h1 {
+          font-size: 2rem;
+        }
+
+        .about-cards {
+          grid-template-columns: 1fr; /* Stack cards on small screens */
+        }
+
+        .contact-info {
+          padding: 2rem;
+        }
+
+        header .container {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        nav {
+          flex-direction: column;
+          gap: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+
+        .hero .btn {
+          padding: 0.8rem 2rem;
+          font-size: 1rem;
+        }
+
+        .about-section h1, .contact-section h1 {
+          font-size: 1.5rem;
+        }
+
+        .about-card .icon {
+          font-size: 2rem;
+        }
+
+        .about-card h3 {
+          font-size: 1.2rem;
+        }
+
+        .contact-item {
+          font-size: 1rem;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .contact-item .icon {
+          font-size: 1.5rem;
+        }
+      }
+    

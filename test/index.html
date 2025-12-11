@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Kompaniya Sayti</title>
+   
+  </head>
+  <body>
+    <div class="main_container">
+      <header>
+        <div class="container">
+          <div class="logo">AS</div>
+          <nav>
+            <a href="login.html" id="login-link" class="login">Tizimga kirish</a>
+            <div class="profile-container" id="profile-container">
+              <a href="#" id="profile-btn" class="profile-btn">Profil</a>
+              <div id="profile-menu" class="profile-menu">
+                <div id="profile-role"></div>
+                <div id="auth-link" class="logout-btn">Log out</div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <main>
+        <div class="hero">
+          <h1>
+            Komp’yuter tuzatish xizmatlari —<br />ishonchli, tezkor va qulay!
+          </h1>
+          <button class="btn">Buyurtma berish</button>
+        </div>
+
+        <section class="about-section">
+          <h1>Biz haqimizda</h1>
+          <p>
+            Bizning kompaniyamiz kompyuterlarni ta'mirlash va texnik xizmat
+            ko'rsatish bo'yicha yetakchi mutaxassislardan iborat. Biz mijozlarimizga
+            eng yuqori sifatli xizmatlarni taqdim etishga intilamiz.
+            Bizning asosiy maqsadimiz — sizning qurilmalaringizni tez, samarali
+            va ishonchli tarzda ish holatiga qaytarishdir.
+          </p>
+          <div class="about-cards">
+            <div class="about-card">
+              <div class="icon"><i class="fas fa-users"></i></div>
+              <h3>Tajribali jamoa</h3>
+              <p>
+                Bizning mutaxassislarimiz ko'p yillik tajribaga ega va so'nggi
+                texnologiyalar bilan doimiy ravishda tanishib boradilar.
+              </p>
+            </div>
+            <div class="about-card">
+              <div class="icon"><i class="fas fa-cogs"></i></div>
+              <h3>Sifatli ehtiyot qismlar</h3>
+              <p>
+                Ta'mirlashda faqat original va sifatli ehtiyot qismlardan
+                foydalanamiz, bu xizmatlarimizning uzoq muddatli ishonchliligini ta'minlaydi.
+              </p>
+            </div>
+            <div class="about-card">
+              <div class="icon"><i class="fas fa-hourglass-half"></i></div>
+              <h3>Tezkor xizmat</h3>
+              <p>
+                Biz vaqtingizni qadrlaymiz. Shuning uchun, xizmatlarni imkon
+                qadar tez va samarali bajarishga harakat qilamiz.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="contact-section">
+          <h1>Biz bilan bog'lanish</h1>
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+              <span>Manzil: Toshkent, O'zbekiston</span>
+            </div>
+            <div class="contact-item">
+              <div class="icon"><i class="fas fa-phone"></i></div>
+              <span>Telefon: +998 94 706 81 11</span>
+            </div>
+            <div class="contact-item">
+              <div class="icon"><i class="fas fa-envelope"></i></div>
+              <span>Email: info@fmt.uz</span>
+            </div>
+            <div class="contact-item">
+              <div class="icon"><i class="fa-brands fa-telegram"></i></div>
+              <a href="https://t.me/s_anvarovicc_571" target="_blank">Telegram:@s_anvarovicc_571</a>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <div class="container">
+          <div class="logo">AS</div>
+          <nav>
+            <p>+998 94 706 81 11</p>
+            <a href="https://t.me/s_anvarovicc_571"><span><i class="fa-brands fa-telegram"></i> </span>Telegram</a>
+          </nav>
+        </div>
+      </footer>
+    </div>
+    <script>
+      // Login holatini va role ni localStorage dan olish
+      const isLoggedIn = localStorage.getItem("token") !== null;
+      const role = localStorage.getItem("role");
+      const validRoles = ["manager", "user"];
+
+      // Elementlarni olish
+      const loginLink = document.getElementById("login-link");
+      const profileContainer = document.getElementById("profile-container");
+      const profileBtn = document.getElementById("profile-btn");
+      const profileMenu = document.getElementById("profile-menu");
+      const profileRole = document.getElementById("profile-role");
+      const authLink = document.getElementById("auth-link");
+      const orderButton = document.querySelector(".btn");
+      // const btnTwo = document.querySelector(".btnTwo"); // Bu tugma endi ishlatilmaydi
+
+      // Login holatini tekshirish va UI ni yangilash
+      if (isLoggedIn && role && validRoles.includes(role)) {
+        loginLink.style.display = "none";
+        profileContainer.style.display = "block";
+        profileRole.textContent = `Role: ${
+          role.charAt(0).toUpperCase() + role.slice(1)
+        }`;
+        authLink.textContent = "Log out";
+        authLink.onclick = logout;
+      } else {
+        loginLink.style.display = "block";
+        profileContainer.style.display = "none";
+      }
+
+      // Profil menyusini ochish/yopish
+      profileBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        profileMenu.classList.toggle("active");
+      });
+
+      // Sahifadan tashqarida bosilganda menyuni yopish
+      document.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+          profileMenu.classList.remove("active");
+        }
+      });
+
+      // Logout funksiyasi
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        window.location.href = "index.html";
+      }
+
+      // Buyurtma tugmasi
+      orderButton.addEventListener("click", () => {
+        window.location.href = "order.html";
+      });
+      // btnTwo.addEventListener("click", () => { // Bu tugma endi ishlatilmaydi
+      //   window.location.href = "order.html";
+      // });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login va Buyurtmalar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef1f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Kirish</h1>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Parol" required />
+      <button type="submit">Kirish</button>
+    </form>
+
+    <div id="orders-section" style="display: none;">
+      <h2>Buyurtmalar</h2>
+      <ul id="order-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("login-form");
+    const ordersSection = document.getElementById("orders-section");
+    const orderList = document.getElementById("order-list");
+
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      fetch("http://127.0.0.1:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          loginForm.style.display = "none";
+          ordersSection.style.display = "block";
+          loadOrders();
+        } else {
+          alert("Login muvaffaqiyatsiz!");
+        }
+      })
+      .catch(err => alert("Xatolik: " + err.message));
+    });
+
+    function loadOrders() {
+      const token = localStorage.getItem("token");
+      fetch("http://127.0.0.1:3000/orders", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        orderList.innerHTML = "";
+        data.forEach(order => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <strong>ID:</strong> ${order.id}<br>
+            <strong>Foydalanuvchi:</strong> ${order.username}<br>
+            <strong>Izoh:</strong> ${order.description}<br>
+            <strong>Status:</strong> ${order.status}<br>
+            <strong>Yaratilgan vaqt:</strong> ${order.createdAt}
+          `;
+          orderList.appendChild(li);
+        });
+      })
+      .catch(err => {
+        orderList.innerHTML = "<li>Xatolik: " + err.message + "</li>";
+      });
+    }
+  </script>
+</body>
+</html>
